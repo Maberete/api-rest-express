@@ -23,7 +23,7 @@ const host = 'localhost';
  */
 app.get('/', (req, res) => {
     // On renvoie une simple chaîne de caractères en réponse
-    res.send('Home Page');
+    res.send('Home page');
 });
 
 /*
