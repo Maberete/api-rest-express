@@ -129,6 +129,27 @@ app.put('/api/entities/:id', (req, res) => {
  *------
  * Démarrage du serveur
  */
+/*
+ *------
+ * DELETE /api/entities/:id
+ *------
+ * Supprime l'entité correspondant à l'id passé dans l'URL
+ */
+app.delete('/api/entities/:id', (req, res) => {
+    // On vérifie d'abord que l'entité existe
+    const entity = entities.find(entity => entity.id === req.params.id);
+
+    if (!entity) {
+        return res.status(404).json(success("Entity not found !!!", null));
+    }
+
+    // On garde tous les éléments SAUF celui dont l'id correspond
+    entities = entities.filter(entity => entity.id !== req.params.id);
+
+    const message = `The Entity [${entity.name}] is successfully deleted !!!`;
+
+    res.json(success(message, entity));
+});
 app.listen(port, () => {
     console.log(`Node.js web server framework running at http://${host}:${port}`);
 });
