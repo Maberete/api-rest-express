@@ -98,6 +98,33 @@ app.post('/api/entities', (req, res) => {
 });
 /*
  *------
+ * PUT /api/entities/:id
+ *------
+ * Modifie l'entité correspondant à l'id passé dans l'URL
+ * avec les nouvelles données envoyées dans le body de la requête
+ */
+app.put('/api/entities/:id', (req, res) => {
+    // On cherche la POSITION de l'entité dans le tableau (pas l'entité elle-même)
+    const index = entities.findIndex(entity => entity.id === req.params.id);
+
+    // Si l'id n'existe pas, findIndex renvoie -1 -> on renvoie une erreur 404
+    if (index === -1) {
+        return res.status(404).json(success("Entity not found !!!", null));
+    }
+
+    // On fusionne l'ancienne entité avec les nouvelles données du body,
+    // tout en gardant le même id (on ne veut pas que le client puisse le changer)
+    const updatedEntity = { ...entities[index], ...req.body, id: entities[index].id };
+
+    // On remplace l'ancienne entité par la mise à jour, à la même position
+    entities[index] = updatedEntity;
+
+    const message = `The Entity [${updatedEntity.name}] is successfully updated !!!`;
+
+    res.json(success(message, updatedEntity));
+});
+/*
+ *------
  * ADMIN DESKTOP
  *------
  * Démarrage du serveur
